@@ -1,0 +1,8 @@
+{
+  "body": "{\"name\":\"Dastardly Bob\", \"reserved\":\" \", \"reserved_by\":\" \",\"color\":\"purple\", \"attachment\":\"hello.jpg\"}",
+  "requestContext": {
+    "identity": {
+      "cognitoIdentityId": "USER-SUB-1239"
+    }
+  }
+}
