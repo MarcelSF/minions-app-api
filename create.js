@@ -8,15 +8,7 @@ export async function main(event, context) {
 
   const params = {
     TableName: "minions02",
-    // 'Item' contains the attributes of the item to be created
-    // - 'userId': user identities are federated through the
-    //             Cognito Identity Pool, we will use the identity id
-    //             as the user id of the authenticated user
-    // - 'minionId': a unique uuid
-    // - 'name': parsed from request body
-    // - 'attachment': parsed from request body
-    // - 'createdAt': current Unix timestamp
-    // - 'reserved' : parsed from request body
+
     Item: {
       minionId: uuid.v1(),
       name: data.name,

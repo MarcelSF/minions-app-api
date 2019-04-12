@@ -46,18 +46,22 @@ export async function main(event, context) {
     }
   };
 
-  // Mailgun execution
+  // Mailgun info
   var api_key = secret-api-key;
   var domain = 'mg.minions-teste.de';
-  var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
+  var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain, timeout: 1500, retry: 2});
   var minion = await dynamoDbLib.call("get", minion_params);
+  var minion_name = minion.Item.name;
+  var minion_price = minion.Item.price;
+  var minion_color = minion.Item.color;
+  var minion_mood = minion.Item.mood;
   var to_email =  await getUserOfAuthenticatedUser(event);
 
   var data = {
     from: 'Excited Minion Fabricator <marcelsf23br@gmail.com>',
     to: `${to_email}`,
     subject: 'Minion reservation confirmed',
-    text: `'Minion ${minion.Item.name}, has been succesfully reserved for $ ${minion.Item.price}. Remember, his alignment is ${minion.Item.mood} and his color is ${minion.Item.color}!`
+    text: `Minion ${minion_name}, has been succesfully reserved for $ ${minion_price}. Remember, his color is ${minion_color} and his alignment is ${minion_mood}`
   };
 
 
@@ -66,11 +70,16 @@ export async function main(event, context) {
   try {
     // console.log(event.requestContext);
     await mailgun.messages().send(data, function (error, body) {
-      console.log(data);
+
       console.log(error);
+      console.log(body);
+      console.log(data);
+
     });
+
     const result = await dynamoDbLib.call("update", params);
     return success({ status: true });
+
   } catch (e) {
     console.log(e);
     return failure({ status: false });
